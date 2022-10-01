@@ -1,0 +1,93 @@
+name: Make sure RAP repository follows requirements for RAPCD
+on:
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - 'DevelopmentScripts/**'
+      - 'build.ps1'
+      - 'psakefile.ps1'
+      - 'ApplicationsXML/**'
+    types: [opened, edited, synchronize]
+
+jobs:
+  check-rap-repo:
+    name: Check RAP repository format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@master
+
+      - name: Check application.xml
+        shell: pwsh
+        run: |
+          $applicationXMLPath = ".\ApplicationsXML\application.xml"
+          $applicationXMLExists = Test-Path $applicationXMLPath
+          if (!$applicationXMLExists)
+          {
+            throw "RAP schema file not found in $applicationXMLPath. RAP repositories must have the RAP schema at ./ApplicationsXML/application.xml."
+          }
+          $rapGuid = (Select-Xml -Path $applicationXMLPath -XPath "/Application/Guid").Node.InnerText
+          if ($rapGuid -eq "00000000-0000-0000-0000-000000000000")
+          {
+            $newGuid = New-Guid
+            Write-Host "RAP GUID has not been updated from RAP template default. Updating RAP GUID with new GUID: $newGuid"
+            ((Get-Content -Path $applicationXMLPath) -replace "00000000-0000-0000-0000-000000000000", $newGuid) | Set-Content -Path $applicationXMLPath
+            Write-Output "UPDATE_PR=true" >> $env:GITHUB_ENV
+          }
+          $rapName = (Select-Xml -Path $applicationXMLPath -XPath '/Application/Name').Node.InnerText
+          if ($rapName -eq "RAPTemplate")
+          {
+            throw "RAP name node has not been updated from RAP template default. Please update RAP name node with the name of your RAP."
+          }
+
+      - name: Replace additional.runsettings path if necessary
+        shell: pwsh
+        run: |
+          $runSettingsPath = Select-String -Path .\DevelopmentScripts\New-TestSettings.ps1 -Pattern 'AdditionalRunSettingsFilePath ='
+          if ($runSettingsPath -like "*.\DevelopmentScripts\additional.runsettings*")
+          {
+            Write-Host "Updating New-TestSettings.ps1 parameter `$AdditionalRunSettingsPath from .\DevelopmentScripts\additional.runsettings to `$PSScriptRoot\additional.runsettings."
+            ((Get-Content -Path .\DevelopmentScripts\New-TestSettings.ps1) -replace '.\\DevelopmentScripts', '$PSScriptRoot') | Set-Content -Path .\DevelopmentScripts\New-TestSettings.ps1
+            Write-Output "UPDATE_PR=true" >> $env:GITHUB_ENV
+          }
+
+      - name: Check build.xml and replace (if necessary)
+        shell: pwsh
+        run: |
+          $buildXMLPath = ".\DevelopmentScripts\build.xml"
+          if (!(Test-Path $buildXMLPath))
+          {
+            throw "build.xml not found in $buildXMLPath. RAP repositories must have build.xml located at $buildXMLPath"
+          }
+          $applicationSchema = (Select-Xml -Path $buildXMLPath -XPath "/BuildTools/RAPBuilder/Applications/Application/ApplicationSchema").Node.InnerText
+          if ($applicationSchema -notlike "*ApplicationsXML/application.xml*")
+          {
+            Write-Host "Updating ApplicationSchema node innertext from $applicationSchema to ApplicationsXML/application.xml."
+            ((Get-Content -Path $buildXMLPath) -replace $applicationSchema, 'ApplicationsXML/application.xml') | Set-Content -Path .\DevelopmentScripts\build.xml
+            Write-Output "UPDATE_PR=true" >> $env:GITHUB_ENV
+          }
+
+      - name: Check psakefile.ps1 for RAPTemplate OpenCover filter
+        shell: pwsh
+        run: |
+          $openCoverFilter = Select-String -Path .\psakefile.ps1 -Pattern 'RAPTemplate'
+          if ($openCoverFilter)
+          {
+            throw ".\psakefile.ps1 contains RAPTemplate OpenCover filter +[RAPTemplate*]*. Please remove reference to RAPTemplate with correct filter for your RAP repository."
+          }
+
+      - name: Check build.ps1 for buildFile parameter
+        shell: pwsh
+        run: |
+          $escapedString = [System.Text.RegularExpressions.Regex]::Escape('buildFile = (Join-Path $BaseDir "psakefile.ps1")')
+          if (!(Select-String -Pattern $escapedString -Path .\build.ps1))
+          {
+            throw ".\build.ps1 does not pass the 'buildFile' parameter into Invoke-Psake. Please add 'buildFile = (Join-Path $BaseDir `"psakefile.ps1`")' to the $Params object."
+          }
+
+      - name: Update pull request with any changes
+        if: ${{ env.UPDATE_PR == 'true' }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Updating RAP repository to follow RAP requirements
