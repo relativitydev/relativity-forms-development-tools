@@ -1,0 +1,16 @@
+<BuildTools>
+  <RAPBuilder>
+    <Applications>
+      <Application name="RAPTemplate" generatenuspec="true">
+        <Destination>Artifacts\RAPTemplate.rap</Destination>
+        <ApplicationSchema>ApplicationsXML/application.xml</ApplicationSchema>
+        <TestDirectory>Source\RAPTemplate.FunctionalTests\bin\</TestDirectory>
+        <Assemblies>
+          <Assembly>Source\RAPTemplate\bin\RAPTemplate.dll</Assembly>
+        </Assemblies>
+        <ResourceFiles />
+        <CustomPages />
+      </Application>
+    </Applications>
+  </RAPBuilder>
+</BuildTools>
