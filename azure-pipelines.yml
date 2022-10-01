@@ -1,0 +1,22 @@
+trigger:
+  branches:
+    include:
+    - '*'
+
+resources:
+  repositories:
+    - repository: azdo_templates
+      type: github
+      name: relativityone/azdo-templates
+      endpoint: relativityone
+      ref: 'refs/heads/main'
+
+stages:
+- template: rapci.yml@azdo_templates  # Template reference
+  parameters:
+    ServiceConnectionName: 'pd - build services - Build Tools' #REPLACE THIS WITH THE SERVICE CONNECTION TO YOUR PROJECT
+    KeyVaultName: 'azdo-rapcd-kv' #REPLACE THIS WITH THE KEY VAULT STORING ARTIFACTORY CREDENTIALS
+   #RelativityBranch: 'develop' - Not required, set this to the branch for the version of Relativity you wish to install to the Hopper before running functional tests
+    buildSteps:
+      - checkout: self
+      - checkout: azdo_templates

@@ -1,0 +1,16 @@
+.vs/
+[b|B]in
+[o|O]bj
+packages
+Artifacts/
+buildtools/*
+!buildtools/packages.config
+FunctionalTestSettings
+FunctionalTest.runsettings
+*.dll
+*.jar
+*.exe
+*.bin
+!vendor/*
+Source/RAPTemplate.FunctionalTests/Files/
+Source/RAPTemplate.FunctionalTests/oi/
