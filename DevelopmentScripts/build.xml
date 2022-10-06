@@ -1,12 +1,12 @@
 <BuildTools>
   <RAPBuilder>
     <Applications>
-      <Application name="RAPTemplate" generatenuspec="true">
-        <Destination>Artifacts\RAPTemplate.rap</Destination>
+      <Application name="EH Fiddle" generatenuspec="true">
+        <Destination>Artifacts\EH_Fiddle.rap</Destination>
         <ApplicationSchema>ApplicationsXML/application.xml</ApplicationSchema>
-        <TestDirectory>Source\RAPTemplate.FunctionalTests\bin\</TestDirectory>
+        <TestDirectory>Source\EH Fiddle.FunctionalTests\bin\</TestDirectory>
         <Assemblies>
-          <Assembly>Source\RAPTemplate\bin\RAPTemplate.dll</Assembly>
+          <Assembly>Source\EH Fiddle\bin\EH Fiddle.dll</Assembly>
         </Assemblies>
         <ResourceFiles />
         <CustomPages />
