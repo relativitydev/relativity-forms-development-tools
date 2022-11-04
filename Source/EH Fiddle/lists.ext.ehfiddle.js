@@ -8,7 +8,10 @@ if (convenienceApi) {
 		if (atid > 0) {
 			if (window.top.relativity && window.top.relativity.navigation && (typeof window.top.relativity.navigation.navigate === "function")) {
 				// tell Relativity to navigate immediately away from the EH Fiddle list page to the creation form
-				window.top.relativity.navigation.navigate(`/Relativity/RelativityInternal.aspx?Mode=Forms&FormMode=add&AppID=${convenienceApi.workspaceID}&ArtifactTypeID=${atid}`);
+				const { artifactID: aid, workspaceID: wid } = convenienceApi;
+				const dest = `/Relativity/RelativityInternal.aspx?Mode=Forms&FormMode=add&AppID=${wid}&ArtifactTypeID=${atid}&ParentArtifactID=${aid}`;
+				console.log("EH FIDDLE Relativity.Lists extension navigating to", dest);
+				window.top.relativity.navigation.navigate(dest);
 			} else {
 				cerr("Could not find the Relativity window via window.top");
 			}
