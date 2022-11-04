@@ -108,7 +108,7 @@
     </ResourceFile>
   </ResourceFiles>
   <ExternalTabs />
-  <ExtractionDate>2022-11-04T16:16:32.1130263Z</ExtractionDate>
+  <ExtractionDate>2022-11-04T17:55:13.5502061Z</ExtractionDate>
   <Guid>102ff410-a6d3-419f-b0fa-df740ded09f0</Guid>
   <Name>EH Fiddle</Name>
   <Objects>
@@ -124,6 +124,17 @@
           <Guid>69cbefe4-4f42-4c10-bdba-b05827b34dd4</Guid>
           <SyncDll>EH Fiddle</SyncDll>
           <ApplicationVersion>0.0.0.5</ApplicationVersion>
+        </ActiveSync>
+        <ActiveSync>
+          <Id>1040146</Id>
+          <ArtifactTypeId>1000053</ArtifactTypeId>
+          <AssemblyArtifactId>1019008</AssemblyArtifactId>
+          <ClassName>EH_Fiddle.RelativityListsListPageInteractionEventHandler</ClassName>
+          <Description>List Page Interaction EventHandler</Description>
+          <ExecutionType>13</ExecutionType>
+          <Guid>095d8204-f069-4b52-bf1f-6a651cc2f28f</Guid>
+          <SyncDll>EH Fiddle</SyncDll>
+          <ApplicationVersion>0.0.0.21</ApplicationVersion>
         </ActiveSync>
       </ActiveSyncs>
       <ArtifactId>1040083</ArtifactId>
@@ -1049,8 +1060,8 @@
     </ParentTab>
   </ParentTabs>
   <RelativityVersion>49.0.32.0</RelativityVersion>
-  <Version>0.0.0.24</Version>
-  <SchemaVersion>0.0.0.20</SchemaVersion>
+  <Version>0.0.0.27</Version>
+  <SchemaVersion>0.0.0.21</SchemaVersion>
   <TabDisplay>false</TabDisplay>
   <OriginSignature>9be9b226-9c95-4553-a792-f0212f667aa2</OriginSignature>
   <MasterScripts />
@@ -1068,7 +1079,7 @@
       <ExecutionType>8</ExecutionType>
       <Order>1</Order>
       <AssemblyName>EH Fiddle.dll</AssemblyName>
-      <ApplicationVersion>0.0.0.20</ApplicationVersion>
+      <ApplicationVersion>0.0.0.21</ApplicationVersion>
       <RunTarget>0</RunTarget>
     </InstallEventHandler>
   </InstallEventHandlers>
