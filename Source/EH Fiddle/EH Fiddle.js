@@ -36,8 +36,7 @@
 				correctly in cases where the layout doesn't contain a parent artifact field
 
 	*/
-
-	const vars = window.vars = (privilegedEnvelope || {}); // variables for sharing between event handlers, and to expose to testing
+	const vars = (privilegedEnvelope || {}); // variables for sharing between event handlers, and to expose to testing
 
 	vars.dev = {
 		omitReportWhenTestable: false,
@@ -1058,7 +1057,8 @@ return ${textContent}`)(popupEventNames, popupConvenienceApi));
 	}
 
 	// Hiding ActionBar by default; See Header Footnote HF002
-	eventHandlers[eventNames.CREATE_ACTION_BAR] = eventHandlers[eventNames.UPDATE_ACTION_BAR] = noOp;
-
+	eventHandlers[eventNames.CREATE_ACTION_BAR] = eventHandlers[eventNames.UPDATE_ACTION_BAR] = function emptyActionBar() {
+		convenienceApi.actionBar.destroy();
+	};
 	return eventHandlers;
 }(eventNames, convenienceApi, privilegedEnvelope));

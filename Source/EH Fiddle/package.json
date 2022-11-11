@@ -1,0 +1,17 @@
+{
+  "name": "eh-fiddle",
+  "version": "1.0.0",
+  "description": "The EH Fiddle Application",
+  "main": "EH Fiddle.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "PRIVATE",
+  "devDependencies": {
+    "jasmine": "^4.5.0",
+    "jasmine-spec-reporter": "^7.0.0",
+    "node-fetch": "^3.3.0"
+  }
+}
