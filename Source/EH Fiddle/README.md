@@ -3,6 +3,9 @@ Open Source Community: The EH Fiddle Application is a tool which allows rapid te
 
 EH Fiddle is itself a Relativity Forms event handler, extending the Application's _**EH Fiddle**_ Object Type. It will analyze your event handler JavaScript, and execute it over existing Object Types and Layouts to which you have permission. This is intended to be a development tool only.
 
+
+
+
 ## Core EH Fiddle Features
 
 * Built as a Relativity Forms event handler.
@@ -22,6 +25,9 @@ EH Fiddle is itself a Relativity Forms event handler, extending the Application'
 ## RAP File Download
 * [EH_Fiddle.rap](/ready-to-use/EH_Fiddle.rap)
 
+
+
+
 # Usage
 ## Getting to EH Fiddle
 1. Install the EH Fiddle Application to your desired Workspace.
@@ -40,6 +46,15 @@ EH Fiddle is itself a Relativity Forms event handler, extending the Application'
 
 ## Known Caveats and Limitations
 * Event handlers applied by EH Fiddle are added after any event handlers which already exist for the Object Types upon which they are tested. For this reason, your handlers for any of the eventNames for which only single handlers may be registered ({ _eventNames.REPLACE_DELETE, eventNames.REPLACE_GET_NEW_OBJECT_INSTANCE, eventNames.REPLACE_OBTAIN_ADDITIONAL_DATA, eventNames.REPLACE_READ, eventNames.REPLACE_SAVE_ }) will be ignored by Relativity Forms if the target Object Type already contains a handler for the event.
+
+
+
+
+# Help and Support for EH Fiddle
+Support for this Application is only available through through [devhelp.relativity.com](https://devhelp.relativity.com/). You are welcome to use the RAP or the code and solution as you see fit within the confines of the license under which it is released; however, if you are looking for support or modifications to the solution, please do reach out to us with a post to the _**RelativityForms**_ category within [devhelp.relativity.com](https://devhelp.relativity.com/).
+
+
+
 
 # EH Fiddle Application Source and Testing
 ## Source
@@ -85,5 +100,3 @@ To run the unit tests:
     * `npm install`
     * `npm run test`
 
-# Help and Support for EH Fiddle
-Support for this Application is only available through through [devhelp.relativity.com](https://devhelp.relativity.com/). You are welcome to use the RAP or the code and solution as you see fit within the confines of the license under which it is released; however, if you are looking for support or modifications to the solution, please do reach out to us with a post to the _**RelativityForms**_ category within [devhelp.relativity.com](https://devhelp.relativity.com/).
