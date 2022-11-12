@@ -39,7 +39,7 @@ EH Fiddle is itself a Relativity Forms event handler, extending the Application'
 ## Known Caveats and Limitations
 * Event handlers applied by EH Fiddle are added after any event handlers which already exist for the Object Types upon which they are tested. For this reason, your handlers for any of the eventNames for which only single handlers may be registered ({ _eventNames.REPLACE_DELETE, eventNames.REPLACE_GET_NEW_OBJECT_INSTANCE, eventNames.REPLACE_OBTAIN_ADDITIONAL_DATA, eventNames.REPLACE_READ, eventNames.REPLACE_SAVE_ }) will be ignored by Relativity Forms if the target Object Type already contains a handler for the event.
 
-## Testing (of the EH Fiddle Relativity Forms event handler)
+## Testing the EH Fiddle Application's Relativity Forms event handler JavaScript (EH Fiddle.js)
 Unit testing is available in this repository via jasmine within NodeJS.
 To run the unit tests:
 * Install NodeJS (16 or later) on your development environment
