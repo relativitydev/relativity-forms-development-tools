@@ -2,11 +2,7 @@
 	"use strict";
 	/* ### Header Footnotes
 
-		HF002 - Currently, something about the action buttons which end up in Fiddles cause
-				unintended connection to / navigation of the EH Fiddle (parent) form rather
-				than the popup itself. It's pretty important to get this fixed.
-
-		HF003 - The idea behind the "which" dropdown was to allow more granular development
+		HF001 - The idea behind the "which" dropdown was to allow more granular development
 				and testing of single handlers rather than full file.  The thought was to
 				have the content specify only specify either the function itself, or just
 				the function's body. Then execution of such a test of verification would
@@ -32,8 +28,19 @@
 					ele('which').editMode = false;
 				* 'which' value considered in verification, testing, and download
 
-		HF004 - We (may) need to check the selected object type for the add forms to work
+		HF002 - We (may) need to check the selected object type for the add forms to work
 				correctly in cases where the layout doesn't contain a parent artifact field
+
+		HF003 - Because popup actionbar button defaults work differently from those in opener forms,
+				Fiddles can cause the unintended connection to / navigation of the EH Fiddle (opener) form rather
+				than the popup itself.  When createActionBar or updateActionBar are not supplied, EH Fiddle 
+				supplies default handlers which are suited for popups.  HOWEVER, currently, user-supplied
+				handlers MIGHT supply handlers which first generate default actionbars or default action buttons
+				which could exhibit these unintended consequences mentioned above.
+				POTENTIAL TODO:  proxy popupConvenienceApi and proxy that proxy's actionBar API in order
+				to point defaults to popupConvenienceApi's actionBar's popup-oriented function equivalents.
+				Note that the generateDefaultActionBar would need to be replaced with the same stand-in which
+				is being used to supplant defaults for unsupplied actionbar handlers, currently.
 
 	*/
 	const vars = (privilegedEnvelope || {}); // variables for sharing between event handlers, and to expose to testing
@@ -50,6 +57,8 @@
 	const FORMS_RUNTIME_ERROR_LIKELY = ' THIS IS LIKELY TO CAUSE A RUNTIME ERROR IN RELATIVITY FORMS.';
 	const CONSOLE_PREFIX = 'EH FIDDLE FORM SAYS:';
 	const NEW_FUNCTION_INVOCATION = 'newFunction';
+	const TEST_RDO_TYPE_NAME = 'EH Fiddle Test RDO';
+	const TEST_RDO_TYPE_LOWER = TEST_RDO_TYPE_NAME.toLocaleLowerCase();
 	const ALTERNATE_FUNCTION_REPORT_NAMES = {
 		Function: 'new Function()',
 		[NEW_FUNCTION_INVOCATION]: 'newly created function',
@@ -93,6 +102,17 @@
 								(textIdentifier.toLowerCase() === 'document');
 					});
 					return response;
+				},
+				setTestTypeAsSelectedDropdownOption(dropdownOptions) {
+					let found = false;
+					return dropdownOptions.map((option) => {
+						const { label } = option;
+						if (!found && label.toLowerCase() === TEST_RDO_TYPE_LOWER) {
+							found = true;
+							option.selected = true;
+						}
+						return option;
+					});
 				}
 			},
 			queryslim: function queryslimObjectManager(artifactTypeID = 25, fields = [{ Name: "*" }], start = 1, length = 25, condition = "", sorts = []) {
@@ -473,21 +493,39 @@
 						ARTIFACT_TYPE_ID.LAYOUT,
 						[{ Name: 'RelativityTextIdentifier' }], 1, 25, `'Object Type' == '${objectTypeName}'`
 					).then(transform.dropdownOptionsFromBase
-					).then((resp) => layoutDD.setChoices(resp)
-					).catch((err) => console.error('error in queryslim of object type layouts', err));
+					).then((resp) => { layoutDD.setChoices(resp);
+					}).catch((err) => console.error('error in queryslim of object type layouts', err));
 				}
 				return result;
 			},
 			objectType: function populateObjectTypeDropdownAsync() {
 				const { dataManager, ele, ARTIFACT_TYPE_ID } = vars;
 				const { queryslim, transform } = dataManager.objectManager;
+				const objectTypeDropdown = ele('objectType');
 				return queryslim(
 					ARTIFACT_TYPE_ID.OBJECT_TYPE,
 					[{ Name: 'Name' }, { Name: 'Artifact Type Id' }, { Name: 'System' }],
 					1, 10000,
 					"('System' <> true) OR ('Artifact Type Id' == 10)", [{ FieldIdentifier: { Name: 'Name' }, Order: 0, Direction: 0 }]
 				).then((resp) => transform.dropdownOptionsFromValues(transform.removeSystemObjectTypes(resp))
-				).then((resp) => ele('objectType').setChoices(resp)
+				).then((resp) => {
+					objectTypeDropdown.setChoices(resp);
+					return resp;
+				}).then(transform.setTestTypeAsSelectedDropdownOption
+				).then((objecttypes) => {
+					const value = (objecttypes.filter((ot) => { return ot.selected })[0] || {value: ""}).value;
+					if (value) {
+						objectTypeDropdown.value = value;
+					}
+					const changeEvent = {
+						detail: {
+							field: objectTypeDropdown,
+							oldValue: vars.NO_VALUE_SENTINEL,
+							value,
+						}
+					};
+					return changeEvent;
+				}).then(vars.uiManager.handleDropdownChange.objectType
 				).catch((err) => console.error(err));
 			},
 		},
@@ -733,19 +771,55 @@
 		},
 		testHandlerInForms: function testHandlerInForms(textContent, workspaceId, artifactTypeId, formModeName, artifactId = 0, layoutId = 0) {
 			const eventHandlerFactory = function (popupControlApi, popupEventNames, popupConvenienceApi) {
-				/*
-				 something about this is binding window and the functions on it (alert, console, window, etc)
-				 to the PARENT window, not the popup (very weird)
-				*/
-				const fun = (new Function('popupEventNames', 'popupConvenienceApi',
+				// Replacing unsupplied createActionBar and updateActionBar with default generation of popup action bar.
+				// See Header Footnote HF003
+				const createDefaultPopupActionBar = function() {
+					return popupConvenienceApi.actionBar.destroy().then(() => {
+						return popupConvenienceApi.actionBar.containersPromise;
+					}).then(({ leftSlotElement, centerSlotElement, rootElement }) => {
+						const buttons = popupConvenienceApi.actionBar.generateDefault.actionButtonsForPopup(popupControlApi);
+						const layoutDropdown = popupConvenienceApi.actionBar.generateDefault.layoutDropdown();
+						rootElement.className = "rwa-button-group";
+						buttons.forEach((button) => {
+							centerSlotElement.appendChild(button);
+						});
+						leftSlotElement.appendChild(layoutDropdown);
+					});
+				};
+				// May want to proxy popupConvenienceApi's actionBar to correct generations away from OPENER oriented actions.
+				// See Header Footnote HF003
+				let handlers = null;
+				try {
+					handlers = (new Function('eventNames', 'convenienceApi',
 					`"use strict";
-const eventNames=popupEventNames;
-const convenienceApi=popupConvenienceApi;
+					try {
 var document = convenienceApi.console.generate.button().ownerDocument;
 var window = document.defaultView;
 const { setTimeout, console, alert, clearTimeout, setInterval, clearInterval, Promise } = window;
-return ${textContent}`)(popupEventNames, popupConvenienceApi));
-				return fun;
+const handlers = ${textContent};
+return handlers; } catch (err) { console.error(\`FATAL ERROR: \${err}\`); }`)(popupEventNames, popupConvenienceApi));
+					const success = typeof handlers === 'object' && handlers;
+					if (success) {
+						const { createActionBar = createDefaultPopupActionBar, updateActionBar = createDefaultPopupActionBar } = handlers;
+						handlers.createActionBar = createActionBar;
+						handlers.updateActionBar = updateActionBar;
+					} else {
+						vars.userFeedback.reportResults({
+							errors: {
+								fatal: [
+									'FATAL ERROR DURING EXECUTION: Failed to create Relativity Forms event handlers object within the popup.'
+								],
+								other: [],
+							},
+							warnings: [],
+						}, false);
+					}
+					return success ? handlers : { createActionBar: createDefaultPopupActionBar, updateActionBar: createDefaultPopupActionBar };
+				} catch (err) {
+					const msg = `${CONSOLE_PREFIX} - FATAL ERROR TRYING TO MAKE FIDDLE IN POPUP: ${err}`;
+					console.error(msg);
+					alert(msg);
+				}
 			};
 			let method;
 			let includeArtifactId = true;
@@ -1056,7 +1130,6 @@ return ${textContent}`)(popupEventNames, popupConvenienceApi));
 		}, 10);
 	}
 
-	// Hiding ActionBar by default; See Header Footnote HF002
 	eventHandlers[eventNames.CREATE_ACTION_BAR] = eventHandlers[eventNames.UPDATE_ACTION_BAR] = function emptyActionBar() {
 		convenienceApi.actionBar.destroy();
 	};
