@@ -34,13 +34,10 @@
 		HF003 - Because popup actionbar button defaults work differently from those in opener forms,
 				Fiddles can cause the unintended connection to / navigation of the EH Fiddle (opener) form rather
 				than the popup itself.  When createActionBar or updateActionBar are not supplied, EH Fiddle 
-				supplies default handlers which are suited for popups.  HOWEVER, currently, user-supplied
-				handlers MIGHT supply handlers which first generate default actionbars or default action buttons
-				which could exhibit these unintended consequences mentioned above.
-				POTENTIAL TODO:  proxy popupConvenienceApi and proxy that proxy's actionBar API in order
-				to point defaults to popupConvenienceApi's actionBar's popup-oriented function equivalents.
-				Note that the generateDefaultActionBar would need to be replaced with the same stand-in which
-				is being used to supplant defaults for unsupplied actionbar handlers, currently.
+				supplies default handlers which are suited for popups.  
+				This logic also protects against the same problem within CUSTOM generated action bars by
+				only providing popup-oriented actionBar method on the convenienceApi given to user-supplied
+				handlers. (createDefaultActionBar and generateDefault.actionButtons point to the popup analogs). 
 
 	*/
 	const vars = (privilegedEnvelope || {}); // variables for sharing between event handlers, and to expose to testing
@@ -514,16 +511,17 @@
 				}).then(transform.setTestTypeAsSelectedDropdownOption
 				).then((objecttypes) => {
 					const value = (objecttypes.filter((ot) => { return ot.selected })[0] || {value: ""}).value;
+					let changeEvent = null;
 					if (value) {
 						objectTypeDropdown.value = value;
+						changeEvent = {
+							detail: {
+								field: objectTypeDropdown,
+								oldValue: vars.NO_VALUE_SENTINEL,
+								value,
+							}
+						};
 					}
-					const changeEvent = {
-						detail: {
-							field: objectTypeDropdown,
-							oldValue: vars.NO_VALUE_SENTINEL,
-							value,
-						}
-					};
 					return changeEvent;
 				}).then(vars.uiManager.handleDropdownChange.objectType
 				).catch((err) => console.error(err));
@@ -777,7 +775,7 @@
 					return popupConvenienceApi.actionBar.destroy().then(() => {
 						return popupConvenienceApi.actionBar.containersPromise;
 					}).then(({ leftSlotElement, centerSlotElement, rootElement }) => {
-						const buttons = popupConvenienceApi.actionBar.generateDefault.actionButtonsForPopup(popupControlApi);
+						const buttons = popupConvenienceApi.actionBar.generateDefault.actionButtonsForPopup(popupControlApi, popupConvenienceApi.formSettings.ObjectTypeName);
 						const layoutDropdown = popupConvenienceApi.actionBar.generateDefault.layoutDropdown();
 						rootElement.className = "rwa-button-group";
 						buttons.forEach((button) => {
@@ -786,8 +784,15 @@
 						leftSlotElement.appendChild(layoutDropdown);
 					});
 				};
-				// May want to proxy popupConvenienceApi's actionBar to correct generations away from OPENER oriented actions.
+				// Providing a popupConvenienceApi clone to allow correction of actionBar button generation away from OPENER oriented actions.
 				// See Header Footnote HF003
+				const targetGenerateDefault = { ...popupConvenienceApi.actionBar.generateDefault };
+				targetGenerateDefault.actionButtons = () => targetGenerateDefault.actionButtonsForPopup(popupControlApi, popupConvenienceApi.formSettings.ObjectTypeName);
+				const targetPopupConvenienceApi = { ...popupConvenienceApi };
+				targetPopupConvenienceApi.actionBar = { ...targetPopupConvenienceApi.actionBar };
+				targetPopupConvenienceApi.actionBar.createDefaultActionBar = createDefaultPopupActionBar;
+				targetPopupConvenienceApi.actionBar.generateDefault = targetGenerateDefault;
+
 				let handlers = null;
 				try {
 					handlers = (new Function('eventNames', 'convenienceApi',
@@ -797,7 +802,7 @@ var document = convenienceApi.console.generate.button().ownerDocument;
 var window = document.defaultView;
 const { setTimeout, console, alert, clearTimeout, setInterval, clearInterval, Promise } = window;
 const handlers = ${textContent};
-return handlers; } catch (err) { console.error(\`FATAL ERROR: \${err}\`); }`)(popupEventNames, popupConvenienceApi));
+return handlers; } catch (err) { console.error(\`FATAL ERROR: \${err}\`); }`)(popupEventNames, targetPopupConvenienceApi));
 					const success = typeof handlers === 'object' && handlers;
 					if (success) {
 						const { createActionBar = createDefaultPopupActionBar, updateActionBar = createDefaultPopupActionBar } = handlers;
