@@ -108,7 +108,7 @@
     </ResourceFile>
   </ResourceFiles>
   <ExternalTabs />
-  <ExtractionDate>2022-11-04T17:55:13.5502061Z</ExtractionDate>
+  <ExtractionDate>2022-11-21T20:48:39.8748241Z</ExtractionDate>
   <Guid>102ff410-a6d3-419f-b0fa-df740ded09f0</Guid>
   <Name>EH Fiddle</Name>
   <Objects>
@@ -1060,8 +1060,8 @@
     </ParentTab>
   </ParentTabs>
   <RelativityVersion>49.0.32.0</RelativityVersion>
-  <Version>0.0.0.27</Version>
-  <SchemaVersion>0.0.0.21</SchemaVersion>
+  <Version>0.1.0.2</Version>
+  <SchemaVersion>0.1.0.1</SchemaVersion>
   <TabDisplay>false</TabDisplay>
   <OriginSignature>9be9b226-9c95-4553-a792-f0212f667aa2</OriginSignature>
   <MasterScripts />
@@ -1079,7 +1079,7 @@
       <ExecutionType>8</ExecutionType>
       <Order>1</Order>
       <AssemblyName>EH Fiddle.dll</AssemblyName>
-      <ApplicationVersion>0.0.0.21</ApplicationVersion>
+      <ApplicationVersion>0.1.0.1</ApplicationVersion>
       <RunTarget>0</RunTarget>
     </InstallEventHandler>
   </InstallEventHandlers>
