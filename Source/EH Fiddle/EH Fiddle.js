@@ -39,6 +39,7 @@
 				only providing popup-oriented actionBar method on the convenienceApi given to user-supplied
 				handlers. (createDefaultActionBar and generateDefault.actionButtons point to the popup analogs). 
 
+		HF004 -
 	*/
 	const vars = (privilegedEnvelope || {}); // variables for sharing between event handlers, and to expose to testing
 
@@ -132,7 +133,6 @@
 		file: {
 			downloadFromText: function downloadFromText(filename, fileText) {
 				const uricomponentencoding = encodeURIComponent(fileText);
-				// const STREAM_URI = `data:application/octet-stream;charset=utf-16le;base64,//${uricomponentencoding}`;
 				const PLAINTEXT_URI = `data:text/plain;charset=utf-8,${uricomponentencoding}`;
 				const el = document.createElement('a');
 				el.style.display = 'none';
@@ -287,7 +287,7 @@
 	.${ vars.uiCss.ehfModalReportResults } ul { margin-bottom: 0; }
 	.${ vars.uiCss.ehfModalReportResults } ul+ul { margin-top: 1em; }
 	.${ vars.uiCss.ehfModalReportResults} ul>li+li, .${vars.uiCss.ehfModalReportResults } ul+ul>:first-child { border-top: 1px solid #ccc; }
-	.${vars.uiCss.ehfModalReportResults}>:last-chile { margin-bottom: 1em; }
+	.${vars.uiCss.ehfModalReportResults}>:last-child { margin-bottom: 1em; }
 `;
 			containers.forEach((name) => addEl(CONTAINER, name));
 			secondaries.forEach((name) => addEl(SECONDARY_CONTAINER, name));
@@ -1036,11 +1036,6 @@ return handlers; } catch (err) { console.error(\`FATAL ERROR: \${err}\`); }`)(po
 	}
 
 	vars.userFeedback = {
-		// TODO: Remove commented code: commenting as I believe confirm is unused
-		// confirm: function confirm(what) {
-		//     console.error('EH FIDDLE AUTO-SENT FALSE TO CONFIRM:', what);
-		//     return false;
-		// },
 		error: function error(what) {
 			console.error(CONSOLE_PREFIX, what);
 		},
@@ -1102,25 +1097,11 @@ return handlers; } catch (err) { console.error(\`FATAL ERROR: \${err}\`); }`)(po
 		// DOM target within the custom text.
 		const texts = convenienceApi.layout.getCustomTexts(layoutData);
 		texts.forEach((t) => { t.Value = '<div id="fiddleTarget"></div>' });
-		// TODO: remove -- convenent code used when developing/debugging EH Fiddle
-		// window.ehFiddle = {
-		//     vars,
-		//     convenienceApi,
-		//     layoutData,
-		//     texts
-		// };
 	};
 
 	eventHandlers[eventNames.HYDRATE_LAYOUT_COMPLETE] = function () {
-		// By HYDRATE_LAYOUT_COMPLETE Relativity Forms has done everything
-		// which it can to ensure that the layout is hydrated; however, the
-		// actual DOM rendering and conversion of underlying web components
-		// from flat markup to fully functional and rendered content is
-		// handled by the browser and its ability to scan and interpret the
-		// DOM put in place by Relativity Forms. Sometimes, this happens
-		// later than HYDRATE_LAYOUT_COMPLETE and so fiddleTarget may not
-		// be present in the DOM, yet.  This function polls every 10ms for
-		// its presence, and once it exists, populates the EH Fiddle controls.
+		// Poll until DOM target for Fiddle population is present.
+		// Interval intentionally quite short.
 		let working;
 		let interval = setInterval(() => {
 			if (!working) {
