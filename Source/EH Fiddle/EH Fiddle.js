@@ -795,14 +795,14 @@
 
 				let handlers = null;
 				try {
-					handlers = (new Function('eventNames', 'convenienceApi',
+					handlers = (new Function('eventNames', 'convenienceApi', 'privilegedEnvelope',
 					`"use strict";
 					try {
 var document = convenienceApi.console.generate.button().ownerDocument;
 var window = document.defaultView;
 const { setTimeout, console, alert, clearTimeout, setInterval, clearInterval, Promise } = window;
 const handlers = ${textContent};
-return handlers; } catch (err) { console.error(\`FATAL ERROR: \${err}\`); }`)(popupEventNames, targetPopupConvenienceApi));
+return handlers; } catch (err) { console.error(\`FATAL ERROR: \${err}\`); }`)(popupEventNames, targetPopupConvenienceApi, null));
 					const success = typeof handlers === 'object' && handlers;
 					if (success) {
 						const { createActionBar = createDefaultPopupActionBar, updateActionBar = createDefaultPopupActionBar } = handlers;
