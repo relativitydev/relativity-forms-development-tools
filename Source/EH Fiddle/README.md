@@ -25,6 +25,9 @@ EH Fiddle is itself a Relativity Forms event handler, extending the Application'
 ## RAP File Download
 * [EH_Fiddle.rap](/ready-to-use/EH_Fiddle.rap)
 
+## Changelog
+* [CHANGELOG.md](CHANGELOG.md)
+
 
 
 
