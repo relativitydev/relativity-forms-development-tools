@@ -1,8 +1,8 @@
 ﻿using kCura.EventHandler;
 
-namespace eh_sandbox
+namespace Picker_Override_Filters
 {
-	[System.Runtime.InteropServices.Guid("0cae30b4-a591-4029-acf7-ac85302ac83f")]
+	[System.Runtime.InteropServices.Guid("458fd0e7-6967-4343-9b67-6575960a5e9a")]
 	[kCura.EventHandler.CustomAttributes.Description("Example Page Interaction event handler for Relativity Forms")]
 	public class FormsEventHandler : PageInteractionEventHandler
 	{

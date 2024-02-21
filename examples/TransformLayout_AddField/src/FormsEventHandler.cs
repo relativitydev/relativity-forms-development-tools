@@ -1,8 +1,8 @@
 ﻿using kCura.EventHandler;
 
-namespace eh_sandbox
+namespace TransformLayout_AddField
 {
-	[System.Runtime.InteropServices.Guid("0cae30b4-a591-4029-acf7-ac85302ac83f")]
+	[System.Runtime.InteropServices.Guid("88b0f647-057b-46a6-8177-73a688f871dd")]
 	[kCura.EventHandler.CustomAttributes.Description("Example Page Interaction event handler for Relativity Forms")]
 	public class FormsEventHandler : PageInteractionEventHandler
 	{

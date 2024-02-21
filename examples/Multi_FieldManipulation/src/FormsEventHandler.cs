@@ -1,8 +1,8 @@
 ﻿using kCura.EventHandler;
 
-namespace eh_sandbox
+namespace Multi_FieldManipulation
 {
-	[System.Runtime.InteropServices.Guid("0cae30b4-a591-4029-acf7-ac85302ac83f")]
+	[System.Runtime.InteropServices.Guid("b0337481-50f1-4306-aff5-bbdfb9821001")]
 	[kCura.EventHandler.CustomAttributes.Description("Example Page Interaction event handler for Relativity Forms")]
 	public class FormsEventHandler : PageInteractionEventHandler
 	{

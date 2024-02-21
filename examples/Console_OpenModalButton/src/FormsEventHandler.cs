@@ -1,8 +1,8 @@
 ﻿using kCura.EventHandler;
 
-namespace eh_sandbox
+namespace Console_OpenModalButton
 {
-	[System.Runtime.InteropServices.Guid("0cae30b4-a591-4029-acf7-ac85302ac83f")]
+	[System.Runtime.InteropServices.Guid("6141e332-7433-4246-a447-aa7cc4100667")]
 	[kCura.EventHandler.CustomAttributes.Description("Example Page Interaction event handler for Relativity Forms")]
 	public class FormsEventHandler : PageInteractionEventHandler
 	{

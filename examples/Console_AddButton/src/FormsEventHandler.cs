@@ -1,6 +1,6 @@
 ﻿using kCura.EventHandler;
 
-namespace eh_sandbox
+namespace Console_AddButton
 {
 	[System.Runtime.InteropServices.Guid("0cae30b4-a591-4029-acf7-ac85302ac83f")]
 	[kCura.EventHandler.CustomAttributes.Description("Example Page Interaction event handler for Relativity Forms")]

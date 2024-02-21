@@ -1,8 +1,8 @@
 ﻿using kCura.EventHandler;
 
-namespace eh_sandbox
+namespace PreSave_Disable_Buttons
 {
-	[System.Runtime.InteropServices.Guid("0cae30b4-a591-4029-acf7-ac85302ac83f")]
+	[System.Runtime.InteropServices.Guid("1699e42e-9900-42ec-aaa1-a9d3b28bd778")]
 	[kCura.EventHandler.CustomAttributes.Description("Example Page Interaction event handler for Relativity Forms")]
 	public class FormsEventHandler : PageInteractionEventHandler
 	{
