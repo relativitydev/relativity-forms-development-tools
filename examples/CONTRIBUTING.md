@@ -22,7 +22,7 @@ Thank you for your interest in contributing to the Relativity Forms Event Handle
 - Test the example thoroughly to ensure it works as expected.
 - Update the examples level README.md to add your new addition to the Contents section.
 
-## best Practices
+## Best Practices
 
 - Use meaningful variable and function names.
 - Comment your code to explain its purpose and any important details.
