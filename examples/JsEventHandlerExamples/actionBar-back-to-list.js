@@ -1,7 +1,6 @@
 ﻿/**
  * Name: Relativity Back To List Action Bar Event Handler
  * Description: This event handler adds a "Back to List" button to the action bar that navigates the user to the List Page of the current active `ArtifactTypeId`.
- * Compatibility: Server 2022 & 2023
  */
 (function(eventNames, convenienceApi) {
     const APP_ID = "appid";
