@@ -2,7 +2,7 @@
 
 namespace FormsExamplePageInteractionEventHandler
 {
-	[kCura.EventHandler.CustomAttributes.Description("Relativity Forms Event Handler - This event handler adds a 'Back To List' button in Forms to attached applications")]
+	[kCura.EventHandler.CustomAttributes.Description("This is an example Page Interaction Event Handler used for a Relativity Forms JS Event Handler")]
 	[System.Runtime.InteropServices.Guid("81db139e-ec16-4620-af05-87f0b40172e5")]
 	public class PageInteractionEventHandler : kCura.EventHandler.PageInteractionEventHandler
 	{

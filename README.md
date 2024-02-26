@@ -18,4 +18,4 @@ The EH Fiddle Application is a tool which allows rapid testing of Relativity For
 * [Source](./Source/)
 
 ## Futures
-In the future, this repository will include a JavaScript library for unit testing Relativity Forms in your own development environments, and potentially also a project template for automation of your Relativity Forms development with NodeJS.
+In the future, this repository will be enhanced with additional examples and tools. Feedback from the community on what you'd like to see is greatly appreciated and can be left by opening an issue.

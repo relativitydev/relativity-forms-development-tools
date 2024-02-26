@@ -1,9 +1,9 @@
 /**
  * Name: Add Field Transform Layout Event Handler
- * Description: This event handler adds a field to the layout programmatically.
+ * Description/Scenario: I'd like to programmatically add a field to my layout. I would like this field to go after the "TR Text Two" field in the same category.
  * Note: This may need to be paired with a replaceSave event handler to ensure that the field is saved.
  */
-(function(convenienceApi, EVENT_NAMES, privilegedEnvelope = {}) {
+(function(convenienceApi, EVENT_NAMES) {
 
 	const eh = {};
 	

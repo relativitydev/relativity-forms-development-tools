@@ -1,34 +1,49 @@
 /**
- * Name: Field Manipulation Event Handlers
- * Description: This is a set of event handlers that demonstrate the various methods to manipulate fields.
+ * Name: Hidden Category Persisted State Event Handlers
+ * Description: This is a set of event handlers that demonstrate how you can use a hidden category to persist state.
+ * Note: We would recommend only using this for very limited state information.
+ * If you have more complex data requirements, we'd recommend you explore other options like building your own custom database.
  */
 (function (eventNames, convenienceApi) {
 	var eventHandlers = {};
 
-	// https://platform.relativity.com/RelativityOne/Content/FormsAPI/Load_Pipeline.htm#transformlayout
+	/**
+	 * Scenario: I have a category with persisted state, but I don't want the end-user to see it. I would like to remove this category prior to rendering. 
+	 * Note: In transformLayout, you only have access to layout data, so you cannot depend on field values.
+	 * https://platform.relativity.com/RelativityOne/Content/FormsAPI/Load_Pipeline.htm#transformlayout
+	 */
 	eventHandlers[eventNames.TRANSFORM_LAYOUT] = function(layoutData) {
 		console.log("Inside TRANSFORM_LAYOUT event handler");
 		console.log(JSON.stringify(layoutData));
-		layoutData.splice(3, 1); //assuming the category you want to remove is at the bottome of the layout, you can remove it like this.
+		layoutData.splice(3, 1); // assuming the category you want to remove is at the bottome of the layout, you can remove it like this.
 	};
 
-	// https://platform.relativity.com/RelativityOne/Content/FormsAPI/Load_Pipeline.htm#hydratelayout
+	/**
+	 * Scenario: I need access to Field values that were persisted in my hidden category to accomplish some task.
+	 * https://platform.relativity.com/RelativityOne/Content/FormsAPI/Load_Pipeline.htm#hydratelayout
+	 */
 	eventHandlers[eventNames.HYDRATE_LAYOUT] = function(layoutData, objectInstanceData) {
-        console.log("Inside HYDRATE_LAYOUT event handler");
-        console.log(JSON.stringify(objectInstanceData));
-		// Depending on if you need the previously saved values of the hidden fields, you can retrieve them out of this object instance data object.
-    };
+		console.log("Inside HYDRATE_LAYOUT event handler");
+		console.log(JSON.stringify(objectInstanceData)); // objectInstanceData can be used to get the values of the fields in the hidden category
+	};
 
+	/**
+	 * Scenario: The user interacts with a field, and I need to update the values of the hidden fields based on the user's interaction.
+	 * https://platform.relativity.com/RelativityOne/Content/FormsAPI/Change_Pipeline.htm#pageinteraction
+	 */
 	eventHandlers[eventNames.PAGE_INTERACTION] = function() { 
 		console.log( "Inside PAGE_INTERACTION event handler" ); 
-		// If you need to update the values of the hidden fields while changes are being made you can do that here
-    };
+		// Update hidden fields based on user interaction using convenienceApi.fieldHelper.setValue
+	};
 
-	// https://platform.relativity.com/RelativityOne/Content/FormsAPI/Submit_Pipeline.htm#replacesave
+	/**
+	 * Scenario: I need to update the values of the hidden fields as a part of the save process.
+	 * https://platform.relativity.com/RelativityOne/Content/FormsAPI/Submit_Pipeline.htm#replacesave
+	 */
 	eventHandlers[eventNames.REPLACE_SAVE] = function(objectInstanceData, objectVersionToken) { 
 		console.log( "Inside REPLACE_SAVE event handler" ); 
-		// If you need to update the values of the hidden fields as a part of the save process, you can do that here
-   };
+		// Change the payload to update the hidden fields in the category
+	};
 
 	return eventHandlers;
 }(eventNames, convenienceApi));

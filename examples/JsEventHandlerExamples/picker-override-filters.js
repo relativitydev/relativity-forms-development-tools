@@ -17,10 +17,7 @@
 						operator: "is like"
 					};
 
-					return defaultGetDataFunction(request)
-						.then(function (response) {
-							return response;
-						});
+					return defaultGetDataFunction(request);
 				}
 			}
 		}

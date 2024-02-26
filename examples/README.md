@@ -1,7 +1,7 @@
 # Relativity Forms Event Handler Examples
 This directory includes a set of example Relativity Forms Event Handlers.
 
-Note: These event handlers are meant to serve as samples and not all of them may work out of the box. Some may require setup. We recommend you use them as a template and/or reference, not for their intended functionality.
+**Note:** These event handlers are meant to serve as samples and not all of them may work out of the box. Some may require setup. We recommend you use them as a template and/or reference, not for their intended functionality.
 
 ## The Basics
 A Relativity Forms event handler consists of two parts:
