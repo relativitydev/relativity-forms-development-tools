@@ -3,7 +3,7 @@
  * Description/Scenario: I'd like to programmatically add a field to my layout. I would like this field to go after the "TR Text Two" field in the same category.
  * Note: This may need to be paired with a replaceSave event handler to ensure that the field is saved.
  */
-(function(convenienceApi, EVENT_NAMES) {
+(function(eventNames, convenienceApi) {
 
 	const eh = {};
 	
@@ -86,7 +86,7 @@
 	}
 
 	// public API
-	eh[EVENT_NAMES.TRANSFORM_LAYOUT] = addFieldToLayout;
+	eh[eventNames.TRANSFORM_LAYOUT] = addFieldToLayout;
 
 	return eh;
-}(convenienceApi, eventNames, privilegedEnvelope))
+}(eventNames, convenienceApi))
