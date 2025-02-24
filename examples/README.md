@@ -35,5 +35,8 @@ For detailed instructions on how to build a Relativity Forms Javascript Event Ha
 * [Add a field to a layout programmatically](./JsEventHandlerExamples/transformLayout-addField.js)
 * [Remove a category](./JsEventHandlerExamples/multi-field-manipulation.js)
 
+### Item List
+* [Adding a custom item list](./JsEventHandlerExamples/custom-item-list.js)
+
 ## Contributing
 If you have an example that you would like to contribute to our Relativity Forms Developer Community, please follow the steps in the [CONTRIBUTING.md](./CONTRIBUTING.md).
