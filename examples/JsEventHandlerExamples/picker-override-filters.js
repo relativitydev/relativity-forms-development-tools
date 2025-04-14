@@ -9,16 +9,12 @@
 		for (var i = 0; i < potentialPickerFields.length; i++) {
 			// ideally you'd target which specific field you want to override, but in this case, let's naively replace all potential picker fields
 			potentialPickerFields[i].pickerDataSource = {
-				customGetDataFunction: function(defaultGetDataFunction, request) {
-					// override the filter for the request, you can set this to a value that you can get from the layout (i.e. via FieldHelper)
-					request.filters[2].condition = { 
-						value: "Apple",
-						displayValue: "Apple",
-						operator: "is like"
-					};
-
-					return defaultGetDataFunction(request);
-				}
+				customGetDataFunction: (defaultGetDataFunction, request) =>
+					defaultGetDataFunction(request).then(data => ({
+						...data,
+						// filter the results to include only items where the 'Name' column has a value of 'apple'.
+						Results: data.Results.filter(item => item["Name"] === "apple")
+					}))
 			}
 		}
 	}
